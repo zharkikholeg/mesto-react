@@ -5,6 +5,7 @@ function Card(props) {
 
   function handleClick() {
     props.onCardClick(props.card);
+    //console.log(props.card)
   }  
 
   return (
@@ -17,7 +18,7 @@ function Card(props) {
         <h3 className="element__text">{props.card.name}</h3>
         <div className="element__likes-wrapper">
           <button type="button" className="element__heart"></button>
-          <p className="element__likecount">0</p>
+          <p className="element__likecount">{props.card.likes.length}</p>
         </div> 
       </div>
     </li>

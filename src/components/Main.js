@@ -8,6 +8,7 @@ function Main(props) {
   const [userDescription, setUserDescription] = React.useState("");
   const [userAvatar, setUserAvatar] = React.useState("");
   const [cards, setCards] = React.useState([]);
+  const [overlayStatus, setOverLayStatus] = React.useState(false);
 
   React.useEffect(() => {
     api.getUser()
@@ -15,22 +16,34 @@ function Main(props) {
         setUserName(res.name);
         setUserDescription(res.about);
         setUserAvatar(res.avatar);
+      }).catch((err) => {
+        console.log(err); 
       });
     api.getAllCards()
       .then(res => {
         setCards(res);
-      })
+      }).catch((err) => {
+        console.log(err); 
+      });
     }, []);
 
   const cardItems = cards.map((card) => (
     <Card card={card} key={card._id} onCardClick={props.onCardClick}/>
   ))
 
+  function handleMouseEnter() {
+    setOverLayStatus(true);
+  }
+
+  function handleMouseLeave() {
+    setOverLayStatus(false);
+  }
+
   return (
     <main>
       <section className="profile">
-        <div className="profile__avatar-wrapper">
-          <div className="profile__avatar-overlay" onClick={props.onEditAvatar}>
+        <div className="profile__avatar-wrapper" onClick={props.onEditAvatar} onMouseOver={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <div className={`profile__avatar-overlay ${overlayStatus ? "profile__avatar-overlay_active" : ""}`} >
             <img src={penPath} alt="" className="profile__avatar-overlay-image"/>
           </div>
           <img className="profile__avatar" src={userAvatar} alt="аватар"/>
@@ -54,19 +67,5 @@ function Main(props) {
     </main>
   )
 }
-
-// const avaWrapper = document.querySelector(".profile__avatar-wrapper");
-// const avaOverlay = document.querySelector(".profile__avatar-overlay");
-
-
-// avaWrapper.addEventListener("mouseover", () => {
-//   avaOverlay.style.visibility = "visible";
-// })
-
-// avaWrapper.addEventListener("mouseout", () => {
-//   avaOverlay.style.visibility = "hidden";
-// })
-
-
 
 export default Main;
