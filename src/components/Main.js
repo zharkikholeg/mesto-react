@@ -22,7 +22,7 @@ function Main(props) {
       })
     }, []);
 
-  const cardItems = cards.map((card, i) => (
+  const cardItems = cards.map((card) => (
     <Card card={card} key={card._id} onCardClick={props.onCardClick}/>
   ))
 
