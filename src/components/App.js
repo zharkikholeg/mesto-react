@@ -140,13 +140,12 @@ function App() {
         setCards(cards.filter(function (card) {
           return card._id !== cardId;
         }))
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {
-        closeAllPopups();
-      })
+
   }
 
   return (
