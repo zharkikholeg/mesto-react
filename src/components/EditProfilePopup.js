@@ -1,5 +1,6 @@
 import React from "react"
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js"
+import PopupWithForm from "./PopupWithForm"
 
 function EditProfilePopup(props) {
 
@@ -13,7 +14,7 @@ function EditProfilePopup(props) {
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser]);
+  }, [currentUser, props.isOpen]);
 
   function handleNameChange(e) {
     setName(e.target.value);
@@ -35,19 +36,14 @@ function EditProfilePopup(props) {
   }
 
   return (
-    <div className={`popup popup_for-${props.name} ${props.isOpen ? 'popup_active' : ''}`}>
-      <div className="popup__container">
-        <h2 className="popup__heading">Редактировать профиль</h2>
-        <form className={`popup__form popup__form_type_${props.name}`} name={props.name} onSubmit={handleSubmit} noValidate>
-          <input className="popup__input " type="text" value={name} onChange={handleNameChange} id="name" name="name" minLength="2" maxLength="40" required />
-          <span className="popup__error name-error"></span>
-          <input className="popup__input" type="text" value={description} onChange={handleDescriptionChange} id="bio" name="bio" minLength="2" maxLength="200" required />
-          <span className="popup__error bio-error"></span>
-          <input className="popup__submit" type="submit" value="Сохранить" />
-        </form>
-        <button className="popup__close-icon" type="button" onClick={props.onClose}></button>
-      </div>
-    </div>
+    <PopupWithForm onSubmit={handleSubmit} isOpen={props.isOpen} onClose={props.onClose} title="Редактировать профиль">
+      <input className="popup__input " type="text" value={name} onChange={handleNameChange} id="name" name="name" minLength="2" maxLength="40" required />
+      <span className="popup__error name-error"></span>
+      <input className="popup__input" type="text" value={description} onChange={handleDescriptionChange} id="bio" name="bio" minLength="2" maxLength="200" required />
+      <span className="popup__error bio-error"></span>
+      <input className="popup__submit" type="submit" value="Сохранить" />
+    </PopupWithForm>
+
   )
 }
 

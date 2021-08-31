@@ -19,7 +19,7 @@ function App() {
     avatar: "https://yandex.com"
   }
 
-  const [isEditProfilePopupOpen, setEditStatus] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddStatus] = React.useState(false);
   const [isEditAvatarPopupOpen, setAvaStatus] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
@@ -52,19 +52,28 @@ function App() {
 
     //Отправляем запрос в API и получаем обновлённые данные карточки
     if (!isLiked) {
-      api.addLike(card._id).then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      });
+      api.addLike(card._id)
+        .then((newCard) => {
+          setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
     } else {
-      api.removeLike(card._id).then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      });
+      api.removeLike(card._id)
+        .then((newCard) => {
+          setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
   }
 
   function handleEditProfileClick() {
-    setEditStatus(true);
+    setIsEditProfilePopupOpen(true);
   }
 
   function handleAddPlaceClick() {
@@ -81,7 +90,7 @@ function App() {
 
   // Проверяем, какой именно попап открыт, чтобы не задействовать хук всегда по 3 раза
   function closeAllPopups() {
-    isEditProfilePopupOpen && setEditStatus(false);
+    isEditProfilePopupOpen && setIsEditProfilePopupOpen(false);
     isAddPlacePopupOpen && setAddStatus(false);
     isEditAvatarPopupOpen && setAvaStatus(false);
     setSelectedCard(null);
@@ -92,14 +101,11 @@ function App() {
       .then((res) => {
         //console.log(res);
         setCurrentUser(res);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {
-        closeAllPopups();
-      }
-      )
   }
 
   function handleUpdateAvatar({ avatar }) {
@@ -108,12 +114,10 @@ function App() {
       .then((res) => {
         //console.log(res);
         setCurrentUser(res);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(() => {
-        closeAllPopups();
       })
 
   }
@@ -122,13 +126,12 @@ function App() {
     api.addCard(data)
       .then((res) => {
         setCards([res, ...cards]);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {
-        closeAllPopups();
-      })
+
   }
 
   function handleCardDelete(cardId) {
@@ -155,9 +158,6 @@ function App() {
         <EditProfilePopup name="editing" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
         <AddPlacePopup name="adding" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onPlaceSubmit={handleAddPlaceSubmit} />
         <EditAvatarPopup name="ava" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-        <PopupWithForm name="submit" title="Вы уверены?">
-          <input className="popup__submit popup__submit_type-submit" type="submit" value="Да" />
-        </PopupWithForm>
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>
 

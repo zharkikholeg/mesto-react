@@ -1,4 +1,5 @@
 import React from "react";
+import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup(props) {
 
@@ -19,23 +20,20 @@ function AddPlacePopup(props) {
     props.onPlaceSubmit({
       name: name,
       link: link
-    })
+    });
+
+    setName('');
+    setLink('');
   }
 
   return (
-    <div className={`popup popup_for-${props.name} ${props.isOpen ? 'popup_active' : ''}`}>
-      <div className="popup__container">
-        <h2 className="popup__heading">Новое место</h2>
-        <form className={`popup__form popup__form_type_${props.name}`} name={props.name} onSubmit={handleSubmit} noValidate>
-          <input className="popup__input" type="text" id="placename" name="placename" placeholder="Название" minLength="2" maxLength="30" onChange={handleNameChange} required />
-          <span className="popup__error placename-error"></span>
-          <input className="popup__input" id="link" name="link" placeholder="Ссылка на картинку" type="url" onChange={handleLinkChange} required />
-          <span className="popup__error link-error"></span>
-          <input className="popup__submit" type="submit" value="Создать" />
-        </form>
-        <button className="popup__close-icon" type="button" onClick={props.onClose}></button>
-      </div>
-    </div>
+    <PopupWithForm onSubmit={handleSubmit} isOpen={props.isOpen} onClose={props.onClose} title="Новое место">
+      <input className="popup__input" type="text" id="placename" name="placename" placeholder="Название" minLength="2" maxLength="30" value={name} onChange={handleNameChange} required />
+      <span className="popup__error placename-error"></span>
+      <input className="popup__input" id="link" name="link" placeholder="Ссылка на картинку" type="url" value={link} onChange={handleLinkChange} required />
+      <span className="popup__error link-error"></span>
+      <input className="popup__submit" type="submit" value="Создать" />
+    </PopupWithForm>
   )
 }
 

@@ -24,7 +24,7 @@ function Card(props) {
     <li className="element" >
       <div className="element__image-wrapper">
         <button type="button" className={isOwner ? "element__trash" : "element__trash_invisible"} onClick={handleDeleteClick}></button>
-        <img className="element__image" alt="" src={props.card.link} onClick={handleClick} />
+        <img className="element__image" alt={props.card.name} src={props.card.link} onClick={handleClick} />
       </div>
       <div className="element__wrapper">
         <h3 className="element__text">{props.card.name}</h3>
